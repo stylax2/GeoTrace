@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoTrace 사용 설명서</title>
+<style>
+  :root {
+    --ink: #1e293b;
+    --sub: #475569;
+    --line: #e2e8f0;
+    --accent: #4f46e5;
+    --bg-soft: #f8fafc;
+    --tip-bg: #eff6ff;
+    --tip-line: #bfdbfe;
+    --warn-bg: #fef3c7;
+    --warn-line: #fcd34d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    color: var(--ink);
+    line-height: 1.7;
+    background: #ffffff;
+  }
+  header {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 8px; font-size: 1.9rem; }
+  header p { margin: 0; opacity: 0.9; }
+  header .app-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35);
+    margin-bottom: 14px;
+  }
+  .layout {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 24px;
+  }
+  nav.toc {
+    flex: 0 0 220px;
+    position: sticky;
+    top: 16px;
+    align-self: flex-start;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.92rem;
+  }
+  nav.toc h2 { font-size: 1rem; margin: 0 0 8px; }
+  nav.toc ol { margin: 0; padding-left: 20px; }
+  nav.toc li { margin: 4px 0; }
+  nav.toc a { color: var(--sub); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  main { flex: 1; min-width: 0; }
+  h2 {
+    font-size: 1.45rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 6px;
+    margin-top: 48px;
+  }
+  h3 { font-size: 1.12rem; margin-top: 28px; }
+  figure {
+    margin: 20px 0;
+    text-align: center;
+  }
+  figure img {
+    max-width: min(100%, 420px);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  }
+  figure.wide img { max-width: 100%; }
+  figcaption {
+    font-size: 0.88rem;
+    color: var(--sub);
+    margin-top: 6px;
+  }
+  ol.steps > li { margin: 8px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.93rem;
+    margin: 16px 0;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--bg-soft); }
+  .tip, .warn {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.95rem;
+  }
+  .tip { background: var(--tip-bg); border: 1px solid var(--tip-line); }
+  .warn { background: var(--warn-bg); border: 1px solid var(--warn-line); }
+  code {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.9em;
+  }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+  .dot.green { background: #16a34a; }
+  .dot.amber { background: #d97706; }
+  .dot.red { background: #dc2626; }
+  .dot.gray { background: #94a3b8; }
+  /* 앱과 동일한 벡터 아이콘을 흰색 라운드 버튼 형태로 표시 */
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+    vertical-align: middle;
+  }
+  .btn-icon svg { width: 20px; height: 20px; fill: #475569; }
+  .btn-icon.active { background: #4f46e5; border-color: #4f46e5; }
+  .btn-icon.active svg { fill: #ffffff; }
+  .btn-icon.handle { width: 26px; height: 26px; border-radius: 50%; background: #f1f5f9; }
+  .btn-icon.handle svg { width: 16px; height: 16px; }
+  /* 본문 문장 안에 넣는 소형 버튼 아이콘 */
+  .btn-icon.sm { width: 24px; height: 24px; border-radius: 8px; margin: 0 2px; }
+  .btn-icon.sm svg { width: 15px; height: 15px; }
+  footer {
+    text-align: center;
+    color: var(--sub);
+    font-size: 0.85rem;
+    padding: 32px 16px;
+    border-top: 1px solid var(--line);
+    margin-top: 48px;
+  }
+  @media (max-width: 800px) {
+    .layout { flex-direction: column; }
+    nav.toc { position: static; flex: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 앱 아이콘 정의: app/src/main/res/drawable/ic_*.xml 의 pathData를 그대로 옮긴 것.
+     본문에서는 <use href="#i-이름"/> 으로 참조한다. -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M3,17.25V21h3.75L17.81,9.94l-3.75,-3.75L3,17.25zM20.71,7.04c0.39,-0.39 0.39,-1.02 0,-1.41l-2.34,-2.34c-0.39,-0.39 -1.02,-0.39 -1.41,0l-1.83,1.83 3.75,3.75 1.83,-1.83z"/></symbol>
+  <symbol id="i-highlighter" viewBox="0 0 24 24"><path d="M7,14c-1.66,0 -3,1.34 -3,3c0,1.31 -1.16,2 -2,2c0.92,1.22 2.49,2 4,2c2.21,0 4,-1.79 4,-4c0,-1.66 -1.34,-3 -3,-3zm13.71,-9.37l-1.34,-1.34c-0.39,-0.39 -1.02,-0.39 -1.41,0L9,12.25L11.75,15l8.96,-8.96c0.39,-0.39 0.39,-1.02 0,-1.41z"/></symbol>
+  <symbol id="i-eraser" viewBox="0 0 24 24"><path d="M16.24,7.56l4.95,4.95c0.78,0.78 0.78,2.05 0,2.83L15,21.53H9l-6.81,-6.81c-0.78,-0.78 -0.78,-2.05 0,-2.83l7.07,-7.07c0.78,-0.78 2.05,-0.78 2.83,0l4.15,2.74zM10.41,5.8L4.6,11.6l4.24,4.24 5.81,-5.81L10.41,5.8z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M12.5,8c-2.65,0 -5.05,0.99 -6.9,2.6L2,7v9h9l-3.62,-3.62c1.39,-1.16 3.16,-1.88 5.12,-1.88c3.54,0 6.55,2.31 7.6,5.5l2.37,-0.78C21.08,11.03 17.15,8 12.5,8z"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M18.4,10.6C16.55,8.99 14.15,8 11.5,8c-4.65,0 -8.58,3.03 -9.96,7.22l2.37,0.78c1.05,-3.19 4.06,-5.5 7.59,-5.5c1.96,0 3.73,0.72 5.12,1.88L13,16h9V7l-3.6,3.6z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13c0,-3.87 -3.13,-7 -7,-7zm0,9.5c-1.38,0 -2.5,-1.12 -2.5,-2.5s1.12,-2.5 2.5,-2.5s2.5,1.12 2.5,2.5s-1.12,2.5 -2.5,2.5z"/></symbol>
+  <symbol id="i-gps" viewBox="0 0 24 24"><path d="M12,8c-2.21,0 -4,1.79 -4,4s1.79,4 4,4s4,-1.79 4,-4s-1.79,-4 -4,-4zm8.94,3c-0.46,-4.17 -3.77,-7.48 -7.94,-7.94V1h-2v2.06C6.83,3.52 3.52,6.83 3.06,11H1v2h2.06c0.46,4.17 3.77,7.48 7.94,7.94V23h2v-2.06c4.17,-0.46 7.48,-3.77 7.94,-7.94H23v-2h-2.06zM12,19c-3.87,0 -7,-3.13 -7,-7s3.13,-7 7,-7s7,3.13 7,7s-3.13,7 -7,7z"/></symbol>
+  <symbol id="i-recenter" viewBox="0 0 24 24"><path d="M21,3L3,10.53v0.98l6.84,2.65L12.48,21h0.98L21,3z"/></symbol>
+  <symbol id="i-track" viewBox="0 0 24 24"><path d="M23,8c0,1.1 -0.9,2 -2,2c-0.18,0 -0.35,-0.02 -0.51,-0.07l-3.56,3.55c0.05,0.16 0.07,0.34 0.07,0.52c0,1.1 -0.9,2 -2,2s-2,-0.9 -2,-2c0,-0.18 0.02,-0.36 0.07,-0.52l-2.55,-2.55c-0.16,0.05 -0.34,0.07 -0.52,0.07s-0.36,-0.02 -0.52,-0.07l-4.55,4.56c0.05,0.16 0.07,0.33 0.07,0.51c0,1.1 -0.9,2 -2,2s-2,-0.9 -2,-2s0.9,-2 2,-2c0.18,0 0.35,0.02 0.51,0.07l4.56,-4.55C8.02,9.36 8,9.18 8,9c0,-1.1 0.9,-2 2,-2s2,0.9 2,2c0,0.18 -0.02,0.36 -0.07,0.52l2.55,2.55c0.16,-0.05 0.34,-0.07 0.52,-0.07s0.36,0.02 0.52,0.07l3.55,-3.56C19.02,8.35 19,8.18 19,8c0,-1.1 0.9,-2 2,-2S23,6.9 23,8z"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M11.99,18.54l-7.37,-5.73L3,14.07l9,7l9,-7l-1.63,-1.27l-7.38,5.74zM12,16l7.36,-5.73L21,9l-9,-7l-9,7l1.63,1.27L12,16z"/></symbol>
+  <symbol id="i-project" viewBox="0 0 24 24"><path d="M10,4H4C2.9,4 2.01,4.9 2.01,6L2,18c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2V8c0,-1.1 -0.9,-2 -2,-2h-8L10,4z"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M3,17v2h6v-2H3zM3,5v2h10V5H3zM13,21v-2h8v-2h-8v-2h-2v6H13zM7,9v2H3v2h4v2h2V9H7zM21,13v-2H11v2h10zM15,9h2V7h4V5h-4V3h-2v6z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M12,8l-6,6l1.41,1.41L12,10.83l4.59,4.58L18,14z"/></symbol>
+  <symbol id="i-touch" viewBox="0 0 24 24"><path d="M9,11.24V7.5C9,6.12 10.12,5 11.5,5S14,6.12 14,7.5v3.74c1.21,-0.81 2,-2.18 2,-3.74C16,5.01 13.99,3 11.5,3S7,5.01 7,7.5c0,1.56 0.79,2.93 2,3.74zm9.84,4.63l-4.54,-2.26c-0.17,-0.07 -0.35,-0.11 -0.54,-0.11H13v-6C13,6.67 12.33,6 11.5,6S10,6.67 10,7.5v10.74c-3.6,-0.76 -3.54,-0.75 -3.67,-0.75c-0.31,0 -0.59,0.13 -0.79,0.33l-0.79,0.8l4.94,4.94C9.96,23.83 10.34,24 10.75,24h6.79c0.75,0 1.33,-0.55 1.44,-1.28l0.75,-5.27c0.01,-0.07 0.02,-0.14 0.02,-0.2c0,-0.62 -0.38,-1.16 -0.91,-1.38z"/></symbol>
+</svg>
+
+<header>
+  <img class="app-icon" src="images/icon.png" alt="GeoTrace 앱 아이콘">
+  <h1>GeoTrace 사용 설명서</h1>
+  <p>현장에서 기록하고, QGIS로 되가져오는 태블릿 현장조사 앱</p>
+</header>
+
+<div class="layout">
+
+<nav class="toc">
+  <h2>목차</h2>
+  <ol>
+    <li><a href="#overview">개요</a></li>
+    <li><a href="#screen">화면 구성</a></li>
+    <li><a href="#basemap">지도 다루기</a></li>
+    <li><a href="#import">GIS 파일 불러오기</a></li>
+    <li><a href="#record">현장 기록</a></li>
+    <li><a href="#settings">설정</a></li>
+    <li><a href="#export">결과 저장과 이어하기</a></li>
+    <li><a href="#qgis">QGIS에서 열기</a></li>
+    <li><a href="#faq">문제 해결 FAQ</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ===================== 1. 개요 ===================== -->
+<h2 id="overview">1. 개요</h2>
+<p>GeoTrace는 사무실의 QGIS와 현장의 Android 태블릿을 오가며 조사하는 앱입니다. 종이지도에 펜으로 표시하듯 지도 위에 직접 그리면서, 포인트·이동 경로·필기를 GIS 데이터로 남깁니다.</p>
+<p>작업 흐름은 네 단계입니다.</p>
+<ol class="steps">
+  <li>QGIS에서 만든 GIS 파일(GPKG, KML)을 앱으로 불러옵니다.</li>
+  <li>현장에서 스케치·포인트·GPS 경로를 기록합니다.</li>
+  <li>결과를 ZIP 파일 하나로 저장합니다.</li>
+  <li>ZIP 안의 <code>field_result.gpkg</code>를 QGIS에서 엽니다.</li>
+</ol>
+<figure>
+  <img src="images/001.png" alt="메인 화면 전체">
+  <figcaption>그림 1. 메인 화면 — 지도, 도구 패널, GPS 정보 카드</figcaption>
+</figure>
+<div class="tip">💡 지도 엔진은 앱에 내장되어 있어 통신이 끊긴 산지에서도 동작합니다. 다만 배경지도 타일은 온라인 연결이 필요하므로, 출발 전에 조사 지역을 미리 열어 타일을 받아 두면 좋습니다.</div>
+
+<!-- ===================== 2. 화면 구성 ===================== -->
+<h2 id="screen">2. 화면 구성</h2>
+
+<h3>2.1 도구 패널</h3>
+<p>화면 상단(세로 모드) 또는 오른쪽(가로 모드)의 패널에 기능 버튼 8개가 모여 있습니다. 왼쪽부터 사용 빈도 순서입니다.</p>
+<table>
+  <tr><th>버튼</th><th>이름</th><th>기능</th></tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-pen"/></svg></span></td>
+    <td>펜</td><td>필기 도구 열기 (펜·형광펜·지우개·색상·두께)</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-pin"/></svg></span></td>
+    <td>포인트</td><td>조사 포인트 생성 (현재 위치 또는 지도 탭)</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-gps"/></svg></span></td>
+    <td>GPS</td><td>GPS 켜기/끄기</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-recenter"/></svg></span></td>
+    <td>현위치</td><td>지도를 현재 위치로 이동</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-track"/></svg></span></td>
+    <td>트랙</td><td>이동 경로 기록 시작/중지</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-layers"/></svg></span></td>
+    <td>지도</td><td>배경지도·오버레이 전환</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-project"/></svg></span></td>
+    <td>프로젝트</td><td>파일 불러오기·결과 저장·레이어 관리</td>
+  </tr>
+  <tr>
+    <td><span class="btn-icon"><svg><use href="#i-settings"/></svg></span></td>
+    <td>설정</td><td>언어·GPS·트랙·나침반 설정</td>
+  </tr>
+</table>
+<figure>
+  <img src="images/002.png" alt="도구 패널 확대">
+  <figcaption>그림 2. 도구 패널 — 좁은 화면에서는 자동으로 2열로 바뀝니다</figcaption>
+</figure>
+<p>패널 끝의 <strong>화살표 핸들</strong> <span class="btn-icon handle"><svg><use href="#i-chevron"/></svg></span> 을 탭하면 패널이 접히고 작은 핸들만 남습니다. 다시 탭하면 펼쳐집니다. 화살표는 패널이 움직일 방향을 가리킵니다.</p>
+<figure>
+  <img src="images/003.png" alt="패널 접힘 상태">
+  <figcaption>그림 3. 패널을 접은 상태 — 지도와 필기 영역이 최대가 됩니다</figcaption>
+</figure>
+
+<h3>2.2 GPS 정보 카드</h3>
+<p>화면 아래의 카드는 두 줄로 현재 상태를 보여 줍니다.</p>
+<ul>
+  <li>1줄: 신호 상태 점 + 정확도(±m) + 좌표</li>
+  <li>2줄: ▲ 고도 + ↑ 진행 방위</li>
+</ul>
+<table>
+  <tr><th>상태 점</th><th>의미</th></tr>
+  <tr><td><span class="dot green"></span>녹색</td><td>정확도 5m 이내 — 양호</td></tr>
+  <tr><td><span class="dot amber"></span>주황</td><td>정확도 15m 이내 — 보통</td></tr>
+  <tr><td><span class="dot red"></span>빨강</td><td>정확도 15m 초과 — 주의</td></tr>
+  <tr><td><span class="dot gray"></span>회색</td><td>GPS 신호 없음</td></tr>
+</table>
+<div class="tip">💡 카드를 <strong>짧게 탭</strong>하면 좌표 형식이 십진도 ↔ 도분초(DMS)로 전환됩니다. <strong>길게 누르면</strong> 현재 좌표가 복사됩니다.</div>
+<figure>
+  <img src="images/004.png" alt="GPS 정보 카드">
+  <figcaption>그림 4. GPS 정보 카드 — 신호가 잡힌 상태</figcaption>
+</figure>
+
+<!-- ===================== 3. 지도 다루기 ===================== -->
+<h2 id="basemap">3. 지도 다루기</h2>
+<ul>
+  <li><strong>손가락 1개</strong>: 지도 이동</li>
+  <li><strong>손가락 2개</strong>: 확대·축소</li>
+  <li><strong>S Pen</strong>: 필기 전용 (지도는 움직이지 않습니다)</li>
+</ul>
+
+<h3>3.1 배경지도 전환</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-layers"/></svg></span> <strong>지도</strong> 버튼을 탭합니다.</li>
+  <li>목록에서 원하는 지도를 선택합니다. 기본으로 VWorld 일반·위성, Google 위성이 들어 있습니다.</li>
+</ol>
+<figure>
+  <img src="images/005.png" alt="지도 전환 메뉴">
+  <figcaption>그림 5. 배경지도 선택 메뉴</figcaption>
+</figure>
+
+<h3>3.2 오버레이 지도</h3>
+<p>같은 메뉴의 <strong>오버레이 지도 설정</strong>에서 배경지도 위에 다른 지도를 겹쳐 표시할 수 있습니다. 예를 들어 위성영상 위에 지형도를 겹치는 식입니다.</p>
+
+<h3>3.3 지도 소스 추가 (XML)</h3>
+<p>기관에서 배포한 타일 지도 주소가 있다면 <strong>XML 파일에서 불러오기</strong>로 등록합니다. 한 번 등록한 소스는 앱에 저장됩니다.</p>
+<figure>
+  <img src="images/006.png" alt="오버레이 설정">
+  <figcaption>그림 6. 오버레이 지도를 겹친 화면</figcaption>
+</figure>
+
+<!-- ===================== 4. GIS 파일 불러오기 ===================== -->
+<h2 id="import">4. GIS 파일 불러오기</h2>
+
+<h3>4.1 파일 가져오기</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-project"/></svg></span> <strong>프로젝트</strong> 버튼 → <strong>GIS 파일 불러오기</strong>를 탭합니다.</li>
+  <li>기기의 Download 폴더 등에서 GPKG 또는 KML 파일을 선택합니다. 여러 파일을 한 번에 선택할 수 있습니다.</li>
+  <li>불러온 레이어는 지도에 바로 표시됩니다.</li>
+</ol>
+<div class="tip">💡 좌표계는 자동으로 변환됩니다. EPSG:5186 같은 한국 좌표계는 물론, 전 세계 대부분의 좌표계를 지원합니다.</div>
+<div class="warn">⚠️ GeoTIFF(항공사진)는 파일 등록까지만 지원하며, 지도 표시는 다음 업데이트에서 제공됩니다.</div>
+<figure>
+  <img src="images/007.png" alt="GIS 파일 불러오기">
+  <figcaption>그림 7. GIS 파일을 불러온 직후의 지도</figcaption>
+</figure>
+
+<h3>4.2 레이어 표시/숨김</h3>
+<p><span class="btn-icon sm"><svg><use href="#i-project"/></svg></span> <strong>프로젝트</strong> → <strong>레이어 표시/숨김</strong>에서 레이어별 체크박스로 켜고 끕니다.</p>
+<figure>
+  <img src="images/008.png" alt="레이어 표시 숨김">
+  <figcaption>그림 8. 레이어 표시/숨김 목록</figcaption>
+</figure>
+
+<h3>4.3 레이어 스타일 바꾸기</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-project"/></svg></span> <strong>프로젝트</strong> → <strong>GIS 레이어 심볼</strong>에서 레이어를 선택합니다.</li>
+  <li>색상은 팔레트에서 탭하거나, 필요하면 색상 코드를 직접 입력합니다.</li>
+  <li>불투명도는 슬라이더, 두께·크기는 −/＋ 버튼으로 조절합니다.</li>
+  <li><strong>저장</strong>을 누르면 지도에 즉시 반영됩니다.</li>
+</ol>
+<figure>
+  <img src="images/009.png" alt="스타일 편집기">
+  <figcaption>그림 9. 레이어 심볼 편집 — 색상 팔레트와 슬라이더</figcaption>
+</figure>
+
+<h3>4.4 라벨 붙이기</h3>
+<ol class="steps">
+  <li>스타일 편집기에서 <strong>라벨 필드</strong> 버튼을 탭합니다.</li>
+  <li>전체 속성 필드 목록이 열립니다. 각 필드 옆에 실제 데이터 값이 함께 표시되므로, 필드명을 몰라도 값을 보고 고를 수 있습니다.</li>
+  <li>라벨을 끄려면 맨 위의 <strong>(라벨 없음)</strong>을 선택합니다.</li>
+</ol>
+<figure>
+  <img src="images/010.png" alt="라벨 필드 선택">
+  <figcaption>그림 10. 라벨 필드 선택 — 필드명 옆에 값 미리보기가 표시됩니다</figcaption>
+</figure>
+
+<!-- ===================== 5. 현장 기록 ===================== -->
+<h2 id="record">5. 현장 기록</h2>
+
+<h3>5.1 스케치 (S Pen)</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-pen"/></svg></span> <strong>펜</strong> 버튼을 탭하면 아래에 필기 도구 창이 열립니다.</li>
+  <li>도구를 고르고 색상과 두께(−/＋)를 정합니다.
+    <br>
+    <span class="btn-icon"><svg><use href="#i-pen"/></svg></span> 펜 ·
+    <span class="btn-icon"><svg><use href="#i-highlighter"/></svg></span> 형광펜 ·
+    <span class="btn-icon"><svg><use href="#i-eraser"/></svg></span> 지우개 ·
+    <span class="btn-icon"><svg><use href="#i-undo"/></svg></span> 실행 취소 ·
+    <span class="btn-icon"><svg><use href="#i-redo"/></svg></span> 다시 실행
+  </li>
+  <li>스타일러스로 지도 위에 그립니다. 필기는 화면이 아니라 <strong>지도 좌표에 붙기</strong> 때문에 지도를 움직이거나 확대해도 같은 자리에 남습니다.</li>
+  <li>실수하면 실행 취소·다시 실행을 사용합니다. 지우개는 닿은 선 전체를 지웁니다.</li>
+</ol>
+<div class="tip">💡 필기 중에도 손가락으로는 지도를 자유롭게 움직일 수 있습니다. 펜과 손가락의 역할이 분리되어 있습니다.</div>
+
+<h3>5.1.1 스타일러스가 없는 기기 — 손가락 필기</h3>
+<p>앱이 시작할 때 기기의 스타일러스 지원 여부를 자동으로 감지합니다.</p>
+<ul>
+  <li><strong>스타일러스 지원 기기</strong>(S Pen, Lenovo Precision Pen, USI 펜 등): 펜으로 필기하고, 손가락은 지도 이동에 사용합니다.</li>
+  <li><strong>스타일러스가 없는 기기</strong>: 손가락 필기가 자동으로 켜져, 손가락이나 일반 정전식 터치펜으로 바로 그릴 수 있습니다. 두 손가락을 대면 필기가 중단되고 지도 확대/축소로 전환됩니다.</li>
+</ul>
+<p>수동 전환이 필요하면(예: 장갑을 끼고 작업할 때) 필기 도구 창의 <span class="btn-icon sm"><svg><use href="#i-touch"/></svg></span> <strong>손가락 필기</strong> 버튼으로 켜고 끌 수 있습니다.</p>
+<div class="tip">💡 전용 스타일러스는 이 설정과 무관하게 항상 필기가 됩니다. 일반 정전식 터치펜은 필압이 없어 선 굵기가 일정하게 그려집니다.</div>
+<figure>
+  <img src="images/011.png" alt="필기 도구">
+  <figcaption>그림 11. 필기 도구 창 — 도구·색상·두께</figcaption>
+</figure>
+<figure>
+  <img src="images/012.png" alt="스케치 예시">
+  <figcaption>그림 12. 위성영상 위에 조사 구역을 스케치한 예</figcaption>
+</figure>
+
+<h3>5.2 조사 포인트</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-pin"/></svg></span> <strong>포인트</strong> 버튼을 탭합니다.</li>
+  <li><strong>현재 위치</strong> — GPS 위치에 바로 생성하거나, <strong>지도에서 선택</strong> — 지도를 탭해 위치를 지정합니다.</li>
+  <li>이름과 설명을 입력하면 지도에 마커가 생깁니다. 생성 시간과 고도는 자동으로 저장됩니다.</li>
+</ol>
+<figure>
+  <img src="images/013.png" alt="포인트 생성">
+  <figcaption>그림 13. 포인트 이름·설명 입력</figcaption>
+</figure>
+
+<h3>5.3 GPS와 이동 경로(트랙)</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-gps"/></svg></span> <strong>GPS</strong> 버튼으로 GPS를 켭니다. 현재 위치가 방향 화살표로 표시됩니다.</li>
+  <li><span class="btn-icon sm"><svg><use href="#i-track"/></svg></span> <strong>트랙</strong> 버튼을 탭하면 이동 경로 기록이 시작됩니다. (GPS가 켜져 있어야 합니다)</li>
+  <li>다시 탭하면 기록이 멈춥니다. 기록된 경로는 자동 저장됩니다.</li>
+</ol>
+<div class="tip">💡 걷는 동안 위치 화살표는 GPS 이동 방향을 따릅니다. 기기를 어느 방향으로 들고 있든 실제 진행 방향을 가리킵니다.</div>
+<figure>
+  <img src="images/014.png" alt="트랙 기록">
+  <figcaption>그림 14. 트랙 기록 중 — 이동 경로가 실시간으로 그려집니다</figcaption>
+</figure>
+<figure>
+  <img src="images/015.png" alt="현위치 화살표">
+  <figcaption>그림 15. 현재 위치와 진행 방향 화살표</figcaption>
+</figure>
+
+<!-- ===================== 6. 설정 ===================== -->
+<h2 id="settings">6. 설정</h2>
+<p><span class="btn-icon sm"><svg><use href="#i-settings"/></svg></span> <strong>설정</strong> 버튼에서 다음을 조정합니다.</p>
+<table>
+  <tr><th>항목</th><th>설명</th></tr>
+  <tr><td>언어</td><td>한국어 / English</td></tr>
+  <tr><td>GPS 샘플링 간격</td><td>항상 · 1초 · 5초 · 10초. 간격이 짧을수록 경로가 정밀하지만 배터리를 더 씁니다.</td></tr>
+  <tr><td>나침반 방위 보정</td><td>기기 센서 오차를 −/＋ 5° 단위로 수동 보정합니다. 아래 6.1 참조.</td></tr>
+  <tr><td>좌표 형식</td><td>십진도 / 도분초. GPS 카드 탭으로도 전환됩니다.</td></tr>
+  <tr><td>프로젝트 포인트 라벨</td><td>불러온 레이어의 포인트 라벨 켜기/끄기</td></tr>
+  <tr><td>트랙 색상·두께</td><td>변경하면 기록 중인 경로에도 즉시 적용됩니다.</td></tr>
+</table>
+<figure>
+  <img src="images/016.png" alt="설정 화면">
+  <figcaption>그림 16. 설정 화면</figcaption>
+</figure>
+
+<h3 id="compass">6.1 나침반 보정</h3>
+<p>정지 상태에서 위치 화살표가 실제 향하는 방향과 다르면 다음 순서로 바로잡습니다.</p>
+<ol class="steps">
+  <li>기기를 8자 모양으로 몇 번 크게 흔들어 자기 센서를 재보정합니다.</li>
+  <li>그래도 어긋나면 설정 → <strong>나침반 방위 보정</strong>에서 −/＋로 오차만큼 조정합니다. 예: 동쪽을 보는데 서쪽으로 표시되면 +180°.</li>
+  <li><strong>초기화</strong> 버튼으로 보정을 0°로 되돌릴 수 있습니다.</li>
+</ol>
+<figure>
+  <img src="images/017.png" alt="나침반 보정">
+  <figcaption>그림 17. 나침반 방위 보정</figcaption>
+</figure>
+
+<!-- ===================== 7. 결과 저장과 이어하기 ===================== -->
+<h2 id="export">7. 결과 저장과 이어하기</h2>
+
+<h3>7.1 결과 ZIP 저장</h3>
+<ol class="steps">
+  <li><span class="btn-icon sm"><svg><use href="#i-project"/></svg></span> <strong>프로젝트</strong> → <strong>결과 저장 (ZIP)</strong>을 탭합니다.</li>
+  <li>저장 위치와 파일명을 정하면 ZIP 파일이 생성됩니다.</li>
+</ol>
+<div class="warn">⚠️ 스케치 이미지는 저장하는 순간의 지도 축척으로 만들어집니다. 스케치 전체가 포함되도록 자동 계산되므로 화면 밖 필기도 잘리지 않습니다.</div>
+<figure>
+  <img src="images/018.png" alt="결과 저장">
+  <figcaption>그림 18. 결과 ZIP 저장</figcaption>
+</figure>
+
+<h3>7.2 다음날 이어서 작업하기</h3>
+<p>기록은 앱 안에 자동 저장됩니다. 앱을 껐다 켜면 이전 세션 요약과 함께 <strong>이어서 진행 / 새로 시작</strong>을 묻는 창이 뜹니다.</p>
+<ul>
+  <li><strong>이어서 진행</strong>: 포인트·경로·필기·레이어가 모두 복원된 상태로 계속 작업합니다.</li>
+  <li><strong>새로 시작</strong>: 확인 절차를 거쳐 세션을 비웁니다. ZIP으로 저장하지 않은 기록은 사라지므로 주의하세요.</li>
+</ul>
+<figure>
+  <img src="images/019.png" alt="이어하기 다이얼로그">
+  <figcaption>그림 19. 이전 세션 이어하기 창</figcaption>
+</figure>
+
+<h3>7.3 결과 ZIP 다시 불러오기</h3>
+<p>다른 기기에서 작업을 이어받거나 저장본을 복원할 때는 <span class="btn-icon sm"><svg><use href="#i-project"/></svg></span> <strong>프로젝트</strong> → <strong>결과 ZIP 불러오기</strong>를 사용합니다. 포인트·경로·필기(원래 굵기 그대로)가 모두 지도에 복원됩니다.</p>
+
+<!-- ===================== 8. QGIS에서 열기 ===================== -->
+<h2 id="qgis">8. QGIS에서 열기</h2>
+<p>ZIP의 압축을 풀면 다음 파일이 들어 있습니다.</p>
+<table>
+  <tr><th>파일</th><th>내용</th></tr>
+  <tr><td><code>field_result.gpkg</code></td><td><strong>주 결과 파일.</strong> survey_point(포인트), route_line(이동 경로), sketch_stroke(필기 벡터)를 담고 있습니다. EPSG:3857.</td></tr>
+  <tr><td><code>sketch_overlay.png</code> (+ pgw/aux.xml)</td><td>필기 이미지. 좌표계 정보가 포함되어 QGIS에 끌어다 놓으면 제자리에 표시됩니다.</td></tr>
+  <tr><td><code>survey_point.geojson</code> 등</td><td>호환용 보조 파일</td></tr>
+</table>
+<ol class="steps">
+  <li>QGIS에 <code>field_result.gpkg</code>를 끌어다 놓습니다.</li>
+  <li>세 레이어를 모두 선택해 추가합니다.</li>
+  <li>필기를 원본 굵기 비율로 보려면 sketch_stroke 심볼에서 선 너비에 <code>width</code> 필드를 지정합니다.</li>
+</ol>
+<figure>
+  <img src="images/020.png" alt="QGIS 로드">
+  <figcaption>그림 20. QGIS에서 결과 레이어를 연 화면</figcaption>
+</figure>
+<figure>
+  <img src="images/021.png" alt="QGIS 스케치 오버레이">
+  <figcaption>그림 21. 위성영상 위에 정렬된 스케치</figcaption>
+</figure>
+
+<!-- ===================== 9. FAQ ===================== -->
+<h2 id="faq">9. 문제 해결 FAQ</h2>
+<table>
+  <tr><th>증상</th><th>해결</th></tr>
+  <tr>
+    <td>펜으로 그려지지 않는다</td>
+    <td>스타일러스가 없는 기기는 손가락 필기가 자동으로 켜집니다. 그래도 안 되면 필기 도구 창의 <strong>손가락 필기</strong> 버튼 상태를 확인하세요. 자세한 내용은 5.1.1을 참고하세요.</td>
+  </tr>
+  <tr>
+    <td>불러온 레이어가 지도에 안 보인다</td>
+    <td>프로젝트 → 레이어 표시/숨김에서 체크 상태를 확인하세요. "엔진 필요"로 표시된 레이어(GeoTIFF 등)는 아직 표시를 지원하지 않습니다.</td>
+  </tr>
+  <tr>
+    <td>위치 화살표 방향이 어긋난다</td>
+    <td>기기를 8자로 흔들어 센서를 재보정한 뒤, 남는 오차는 설정의 <a href="#compass">나침반 방위 보정</a>으로 맞추세요. 걷기 시작하면 GPS 방향이 우선 적용되어 정확해집니다.</td>
+  </tr>
+  <tr>
+    <td>GPS가 잡히지 않는다 (회색 점)</td>
+    <td>위치 권한을 확인하고, 하늘이 열린 곳에서 잠시 기다리세요. 건물 안·골짜기에서는 시간이 걸릴 수 있습니다.</td>
+  </tr>
+  <tr>
+    <td>배경지도가 안 나온다</td>
+    <td>배경지도 타일은 온라인 연결이 필요합니다. 통신이 되는 곳에서 조사 지역을 미리 열어 두세요. 필기·포인트·트랙 기록은 오프라인에서도 계속 됩니다.</td>
+  </tr>
+  <tr>
+    <td>QGIS에서 필기가 화면보다 두껍다</td>
+    <td>PNG는 저장 시점의 축척으로 굳는 이미지입니다. 정확한 굵기가 필요하면 <code>sketch_stroke</code> 벡터 레이어를 사용하세요.</td>
+  </tr>
+  <tr>
+    <td>실수로 세션을 지웠다</td>
+    <td>마지막으로 저장한 결과 ZIP이 있다면 "결과 ZIP 불러오기"로 복원할 수 있습니다. 저장하지 않은 기록은 복구되지 않으므로, 작업을 마칠 때마다 ZIP 저장을 권합니다.</td>
+  </tr>
+</table>
+
+</main>
+</div>
+
+<footer>
+  GeoTrace — 현장조사 기술검증 빌드 · 이 문서는 GitHub Pages로 게시됩니다.
+</footer>
+
+</body>
+</html>
