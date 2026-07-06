@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  GeoTrace — worldwide base map sources.
+  Import via the app: Project menu is not needed; open the base-map switch menu
+  ("Switch Base Map") and choose "Import from XML", then select this file.
+
+  Note on usage: tile providers have their own terms of service. Bulk offline
+  download of Google or OpenStreetMap tiles is not permitted by their policies.
+  Use these for on-screen display; download offline packs only from sources you
+  are licensed to use.
+-->
+<mapSources>
+  <source
+    name="OpenStreetMap"
+    url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    minZoom="0"
+    maxZoom="19"
+    servers="" />
+
+  <source
+    name="ESRI World Imagery"
+    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+    minZoom="0"
+    maxZoom="19"
+    servers="" />
+
+  <source
+    name="ESRI World Topo"
+    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+    minZoom="0"
+    maxZoom="19"
+    servers="" />
+
+  <source
+    name="Google Satellite"
+    url="https://mt{s}.google.com/vt/lyrs=s&amp;x={x}&amp;y={y}&amp;z={z}"
+    minZoom="0"
+    maxZoom="20"
+    servers="0,1,2,3" />
+
+  <source
+    name="Google Hybrid"
+    url="https://mt{s}.google.com/vt/lyrs=y&amp;x={x}&amp;y={y}&amp;z={z}"
+    minZoom="0"
+    maxZoom="20"
+    servers="0,1,2,3" />
+
+  <source
+    name="CartoDB Positron (light)"
+    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+    minZoom="0"
+    maxZoom="20"
+    servers="a,b,c,d" />
+
+  <source
+    name="CartoDB Dark Matter (dark)"
+    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+    minZoom="0"
+    maxZoom="20"
+    servers="a,b,c,d" />
+</mapSources>
